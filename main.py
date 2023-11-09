@@ -1,21 +1,21 @@
-import turtle as obj
+import turtle
 from time import sleep, perf_counter
-from math import sin, cos, radians
+from math import sin, cos, radians, sqrt
 
 g = 9.81
 
-def set_env():
-    terrain = obj
+gui = turtle.Screen()
+gui.title("Parabolic Motion Simulator")
 
+def set_env():
+    ground = turtle.Turtle()
+    ground.hideturtle()
+    ground.penup()
     
-    terrain.title("Parabolic Motion Simulator")
-    terrain.hideturtle()
-    terrain.penup()
-    
-    terrain.goto(-500, -200)
-    terrain.color('green')
-    terrain.pendown()
-    terrain.setpos(500, -200)
+    ground.goto(-500, -200)
+    ground.color('green')
+    ground.pendown()
+    ground.setpos(500, -200)
 
 def set_proiettile():
     obj.hideturtle()
@@ -32,13 +32,19 @@ def set_proiettile():
     obj.pendown()
         
 def take_input():
-    v = obj.numinput("Velocità iniziale", "Inserire la velocità con cui il proiettile viene sparato: ", 10, 1, 100)
-    # h = obj.numinput("Altezza iniziale", "Inserire l'altezza da cui proiettile viene sparato: ", 10, 1, 100)
-    teta = obj.numinput("Angolo di lancio", "Inserire l'angolo con cui il proiettile viene sparato: ", 45, 0, 360)
+    gui = turtle.Screen()
+
+    v = gui.numinput("Velocità iniziale", "Inserire la velocità con cui il proiettile viene sparato: ", 10, 1, 100)
+    # h = gui.numinput("Altezza iniziale", "Inserire l'altezza da cui proiettile viene sparato: ", 10, 1, 100)
+    teta = gui.numinput("Angolo di lancio", "Inserire l'angolo con cui il proiettile viene sparato: ", 45, 0, 360)
     
     return v, teta
 
-def aggiorna_xyv(vx, vy, teta, delta_t):
+
+obj = turtle.Turtle()
+text_velocity = turtle.Turtle()
+
+def aggiorna_xyv(vx, vy, delta_t):
     x = obj.xcor() + vx*delta_t
 
     y = (-1/2) * g * (delta_t ** 2) + vy*delta_t + obj.ycor()
@@ -49,6 +55,9 @@ def aggiorna_xyv(vx, vy, teta, delta_t):
 
 
 def move_proiettile(v0, teta):
+    text_velocity.hideturtle()
+    text_velocity.penup()
+    text_velocity.goto(-500, 100)  # Adjust the position as needed
     set_proiettile()
 
     vx = v0*cos(teta)
@@ -56,9 +65,10 @@ def move_proiettile(v0, teta):
 
 
     while obj.ycor() >= -200:
-        x, y, vy = aggiorna_xyv(vx, vy, teta, 0.01)
+        x, y, vy = aggiorna_xyv(vx, vy, 0.01)
         
-        obj.write("Home = ", True, align="center")
+        text_velocity.clear()
+        text_velocity.write(f"Velocity: {round(sqrt(vx ** 2 + vy ** 2), 3)} m/s", align="left", font=("Arial", 10, "normal"))
         
         obj.goto(x, y)
 
@@ -69,4 +79,4 @@ if __name__ == "__main__":
 
     
     move_proiettile(velocita, radians(angolo))
-    obj.mainloop()
+    gui.mainloop()
