@@ -40,9 +40,10 @@ def take_input():
     
     return v, teta
 
-
 obj = turtle.Turtle()
 text_velocity = turtle.Turtle()
+text_distance = turtle.Turtle()
+text_time = turtle.Turtle()
 
 def aggiorna_xyv(vx, vy, delta_t):
     x = obj.xcor() + vx*delta_t
@@ -57,19 +58,38 @@ def aggiorna_xyv(vx, vy, delta_t):
 def move_proiettile(v0, teta):
     text_velocity.hideturtle()
     text_velocity.penup()
-    text_velocity.goto(-500, 100)  # Adjust the position as needed
+    text_velocity.goto(-500, 200)  
+
+    text_distance.hideturtle()
+    text_distance.penup()
+    text_distance.goto(-500, 250)
+
+    text_time.hideturtle()
+    text_time.penup()
+    text_time.goto(-500, 300)
+
     set_proiettile()
 
     vx = v0*cos(teta)
     vy = v0*sin(teta)
 
+    tempo_totale = 0
 
     while obj.ycor() >= -200:
-        x, y, vy = aggiorna_xyv(vx, vy, 0.01)
+        tempo_totale += 0.1
+        x, y, vy = aggiorna_xyv(vx, vy, 0.1)
         
         text_velocity.clear()
         text_velocity.write(f"Velocity: {round(sqrt(vx ** 2 + vy ** 2), 3)} m/s", align="left", font=("Arial", 10, "normal"))
+
+        text_distance.clear()
+        text_distance.write(f"Distanza percorsa: {round(abs(-500 - x), 3)} meters", align="left", font=("Arial", 10, "normal"))
         
+        text_distance.clear()
+        text_distance.write(f"Distanza percorsa: {round(abs(-500 - x), 3)} meters", align="left", font=("Arial", 10, "normal"))
+        
+        text_time.clear()
+        text_time.write(f"Tempo in volo: {tempo_totale} secondi", align="left", font=("Arial", 10, "normal"))
         obj.goto(x, y)
 
 if __name__ == "__main__":
